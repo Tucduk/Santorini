@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -17,7 +18,7 @@ public class Appli extends Application {
         Plateau plateau = new Plateau();
         fenetre = new Fenetre(plateau);
         root.getChildren().add(fenetre);
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, 500, 500, Color.LIGHTGREY));
         primaryStage.show();
     }
 
