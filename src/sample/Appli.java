@@ -1,10 +1,10 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 
 public class Appli extends Application {
 
@@ -12,9 +12,12 @@ public class Appli extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Santorini");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setTitle("Carcassonne");
+        Group root = new Group();
+        Plateau plateau = new Plateau();
+        fenetre = new Fenetre(plateau);
+        root.getChildren().add(fenetre);
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
