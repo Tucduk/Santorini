@@ -12,7 +12,7 @@ public class Appli extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Carcassonne");
+        primaryStage.setTitle("Santorini");
         Group root = new Group();
         Plateau plateau = new Plateau();
         fenetre = new Fenetre(plateau);
