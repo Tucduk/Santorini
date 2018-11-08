@@ -20,9 +20,9 @@ public class Plateau extends Application {
         GridPane grid = new GridPane();
 
         Image sol = new Image ("/imageSantorini/Sol.png",200,200,true,true);
-        Image  sol2 = new Image ("/imageSantorini/Sol2.png",200,200,true,true);
-        Image  sol3 = new Image ("/imageSantorini/Sol3.png",200,200,true,true);
-        Image  sol4 = new Image ("/imageSantorini/Sol4.png",200,200,true,true);
+        Image sol2 = new Image ("/imageSantorini/Sol2.png",200,200,true,true);
+        Image sol3 = new Image ("/imageSantorini/Sol3.png",200,200,true,true);
+        Image sol4 = new Image ("/imageSantorini/Sol4.png",200,200,true,true);
 
         Image[] image = {sol, sol2, sol3, sol4};
 
