@@ -53,7 +53,7 @@ public class Plateau extends Application {
                 //image aléatoire au milieu
                 else if (row !=4 && row != 0 && col != 0){
                     Random random = new Random();
-                    button.setGraphic(image[random.nextInt(4)]);
+                    button.setGraphic(image[random.nextInt(3)]);
                 }
                 grid.add(button,col,row);
             }
