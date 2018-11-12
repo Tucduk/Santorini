@@ -19,15 +19,15 @@ public class Plateau extends Application {
         Controller controller;
         Button button;
 
-        Image sol = new Image ("/imageSantorini/Sol.png",150,150,true,true);
-        Image sol2 = new Image ("/imageSantorini/Sol2.png",150,150,true,true);
-        Image sol3 = new Image ("/imageSantorini/Sol3.png",150,150,true,true);
-        Image sol4 = new Image ("/imageSantorini/Sol4.png",150,150,true,true);
+        Image sol = new Image ("/imageSantorini/Sol.PNG",150,150,true,true);
+        Image sol2 = new Image ("/imageSantorini/Sol2.PNG",150,150,true,true);
+        Image sol3 = new Image ("/imageSantorini/Sol3.PNG",150,150,true,true);
+        Image sol4 = new Image ("/imageSantorini/Sol4.PNG",150,150,true,true);
 
-        Image base = new Image ("/imageSantorini/Maison.png",150,150,true,true);
-        Image base2 = new Image ("/imageSantorini/Maison2.png",150,150,true,true);
-        Image base3 = new Image ("/imageSantorini/Maison3.png",150,150,true,true);
-        Image base4 = new Image ("/imageSantorini/Maison4.png",150,150,true,true);
+        Image base = new Image ("/imageSantorini/Maison.PNG",150,150,true,true);
+        Image base2 = new Image ("/imageSantorini/Maison2.PNG",150,150,true,true);
+        Image base3 = new Image ("/imageSantorini/Maison3.PNG",150,150,true,true);
+        Image base4 = new Image ("/imageSantorini/Maison4.PNG",150,150,true,true);
 
         Image[] imageBase = new Image[]{base, base2, base3, base4};
 

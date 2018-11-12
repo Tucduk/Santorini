@@ -11,10 +11,10 @@ public class Controller {
     Joueur joueur;
     private static int tour = 0;
 
-    Image base = new Image("/imageSantorini/Maison.png", 150, 150, true, true);
-    Image base2 = new Image("/imageSantorini/Maison2.png", 150, 150, true, true);
-    Image base3 = new Image("/imageSantorini/Maison3.png", 150, 150, true, true);
-    Image base4 = new Image("/imageSantorini/Maison4.png", 150, 150, true, true);
+    Image base = new Image("/imageSantorini/Maison.PNG", 150, 150, true, true);
+    Image base2 = new Image("/imageSantorini/Maison2.PNG", 150, 150, true, true);
+    Image base3 = new Image("/imageSantorini/Maison3.PNG", 150, 150, true, true);
+    Image base4 = new Image("/imageSantorini/Maison4.PNG", 150, 150, true, true);
 
     Image[] imageBase = {base, base2, base3, base4};
 

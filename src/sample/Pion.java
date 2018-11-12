@@ -8,8 +8,8 @@ public class Pion extends Joueur{
     protected String couleur;
     protected String pos;
 
-    Image pion = new Image("/imageSantorini/pion1.png", 150, 150, true, true);
-    Image pion2 = new Image("/imageSantorini/pion2.png", 150, 150, true, true);
+    Image pion = new Image("/imageSantorini/Pion1.PNG", 150, 150, true, true);
+    Image pion2 = new Image("/imageSantorini/Pion2.PNG", 150, 150, true, true);
 
     Image[] imagePion = {pion, pion2};
 
