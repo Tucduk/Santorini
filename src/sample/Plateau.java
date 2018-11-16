@@ -1,12 +1,16 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.awt.*;
 import java.util.Random;
 
 public class Plateau extends Application {
@@ -23,6 +27,11 @@ public class Plateau extends Application {
         Image sol2 = new Image ("/imageSantorini/Sol2.PNG",150,150,true,true);
         Image sol3 = new Image ("/imageSantorini/Sol3.PNG",150,150,true,true);
         Image sol4 = new Image ("/imageSantorini/Sol4.PNG",150,150,true,true);
+        ImageView roseVent = new ImageView(new Image("/imageSantorini/rosesDesVents.png",150,150,true,true));
+
+
+
+
 
         Image base = new Image ("/imageSantorini/Maison.PNG",150,150,true,true);
         Image base2 = new Image ("/imageSantorini/Maison2.PNG",150,150,true,true);
@@ -64,7 +73,9 @@ public class Plateau extends Application {
             }
         }
 
-        Scene scene = new Scene(grid, I*150, I*150);
+        grid.add(roseVent,5,0);
+
+        Scene scene = new Scene(grid, (I*150)+200, I*150);
         primaryStage.setTitle("Santorini");
         primaryStage.setScene(scene);
         primaryStage.show();
