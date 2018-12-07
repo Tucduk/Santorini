@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class Controller implements ActionListener {
     Plateau p;
     Model m;
-    private static int tour = 1;
+    Pouvoir pouv;
     JButton button;
     private char firsti;
     private char secondei;
@@ -30,6 +30,7 @@ public class Controller implements ActionListener {
     boolean firstSelect = false;
     boolean mouvementPion = false;
     Piece piece;
+    boolean pouvoirActive = false;
     private int etage[][] = new int[6][6];
     private String tourEquipe = "noir";
     private boolean erreur = false;
@@ -40,6 +41,11 @@ public class Controller implements ActionListener {
         this.p = p;
         this.m = m;
         p.setBoutonControler(this);
+
+    }
+
+    public void ActiverPouvoir(){
+        pouvoirActive = true;
     }
 
 
@@ -47,372 +53,400 @@ public class Controller implements ActionListener {
 
         String actionCommande = e.getActionCommand();
 
+        if (actionCommande == "pouvoir") {
+            if (m.getTour() > 4) {
 
-        if (tour % 2 == 0) {
-            tourEquipe = "white";
+                Pouvoir pouvoir = new Pouvoir(this);
+
+                p.joueur1.getHero().setPouvoir(pouvoir);
+                p.joueur2.getHero().setPouvoir(pouvoir);
+
+                if (m.getTour() % 2 == 0) {
+                    p.joueur2.getHero().getPouvoir().utiliserPouvoir(p.joueur2.getHero().getNomHero());
+                } else {
+                    p.joueur1.getHero().getPouvoir().utiliserPouvoir(p.joueur1.getHero().getNomHero());
+                }
+
+            }
         } else {
-            tourEquipe = "black";
-        }
 
-        // tour de jeu
-        if (tour > 4) {
+            if (m.getTour() % 2 == 0) {
+                tourEquipe = "white";
+            } else {
+                tourEquipe = "black";
+            }
 
-            if (mouvementPion == false) {
-                // deplacement pion
+            // tour de jeu
+            if (m.getTour() > 4) {
+
+                if (m.getDeplacementPossible() != 0) {
+                    // deplacement pion
+
+                    if (m.getPionSelectionner() == null) {
 
 
-                if (!firstSelect) {
+                        firsti = actionCommande.charAt(0);
+                        firstj = actionCommande.charAt(1);
+                        indiceInitI = firsti - '0';
+                        indiceInitJ = firstj - '0';
 
+
+                        if ((p.pion[indiceInitI][indiceInitJ] != null)) {
+
+                            if (tourEquipe == (p.pion[indiceInitI][indiceInitJ].getCouleur())) {
+
+                                m.setPionSelectionner(p.pion[indiceInitI][indiceInitJ]);
+
+                                //p.roseDesVents(indiceInitI, indiceInitJ);
+                                p.labelMessage.setText("Cliquez sur une case pour déplacer le pion");
+
+                            } else {
+                                p.dialogPerdu("Veuillez cliquez sur un de vos pions (de meme couleur)");
+
+                            }
+
+                        } else {
+                            firstSelect = false;
+                            p.dialogPerdu("Veuillez cliquez sur un de vos pions");
+                        }
+
+
+                    } else {
+
+                        secondei = actionCommande.charAt(0);
+                        secondej = actionCommande.charAt(1);
+                        indiceSecondeI = secondei - '0';
+                        indiceSecondeJ = secondej - '0';
+
+                        int diffI = indiceInitI - indiceSecondeI;
+                        int diffJ = indiceInitJ - indiceSecondeJ;
+                        diffI = Math.abs(diffI);
+                        diffJ = Math.abs(diffJ);
+
+                        // Swap
+
+                        if ((p.pion[indiceSecondeI][indiceSecondeJ] == null)) {
+
+
+                            if ((diffI < 2 && diffJ < 2)) {
+
+                                indicePionBougeeI = indiceSecondeI;
+                                indicePionBougeeJ = indiceSecondeJ;
+
+
+                                if (p.pion[indiceInitI][indiceInitJ].getCouleur() == "white") {
+
+                                    switch (etage[indiceSecondeI][indiceSecondeJ]) {
+                                        case 0:
+                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/pion_blanc.PNG"));
+                                            erreur = false;
+                                            break;
+                                        case 1:
+                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage1_pion_blanc.PNG"));
+                                            break;
+                                        case 2:
+                                            if ((etage[indiceInitI][indiceInitJ] == 1) || (etage[indiceInitI][indiceInitJ] == 2)) {
+                                                p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage2_pion_blanc.PNG"));
+                                                erreur = false;
+                                            } else {
+                                                p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
+                                                erreur = true;
+                                            }
+                                            break;
+                                        case 3:
+                                            if ((etage[indiceInitI][indiceInitJ] == 2) || (etage[indiceInitI][indiceInitJ] == 3)) {
+                                                p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage3_pion_blanc.PNG"));
+                                                erreur = false;
+                                                if (etage[indiceInitI][indiceInitJ] == 2) {
+                                                    p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
+                                                }
+                                                if (etage[indiceInitI][indiceInitJ] == 3) {
+                                                    p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
+                                                }
+                                                p.dialogPerdu("GAGNER");
+                                                p.gagner();
+                                            } else {
+                                                p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
+                                                erreur = true;
+                                            }
+                                            break;
+                                        case 4:
+                                            p.dialogPerdu("Deplacement impossible");
+                                            erreur = true;
+                                            break;
+                                    }
+                                    switch (etage[indiceInitI][indiceInitJ]) {
+                                        case 0:
+                                            if (!erreur) {
+                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/Sol5.PNG"));
+                                            }
+                                            break;
+                                        case 1:
+                                            if (!erreur) {
+                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage1.PNG"));
+                                            }
+                                            break;
+                                        case 2:
+                                            if (!erreur) {
+                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
+                                            }
+                                            break;
+
+
+                                        case 3:
+                                            if (!erreur) {
+                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
+                                            }
+                                            break;
+                                    }
+
+
+                                    if (!erreur) {
+                                        p.pion[indiceSecondeI][indiceSecondeJ] = p.pion[indiceInitI][indiceInitJ];
+                                        p.pion[indiceInitI][indiceInitJ] = null;
+                                        m.setPionSelectionner(p.pion[indiceSecondeI][indiceSecondeJ]);
+                                        firstSelect = false;
+                                        m.setDeplacementPossible(m.getDeplacementPossible() - 1);
+                                        p.labelDeplacement.setText("" + m.getDeplacementPossible());
+                                        if (m.getDeplacementPossible() == 0) {
+                                            p.labelMessage.setText("Constuire");
+                                        }
+
+                                    }
+
+
+                                } else {
+                                    switch (etage[indiceSecondeI][indiceSecondeJ]) {
+                                        case 0:
+                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/pion_noir.PNG"));
+                                            erreur = false;
+                                            break;
+                                        case 1:
+                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage1_pion_noir.PNG"));
+                                            erreur = false;
+                                            break;
+                                        case 2:
+                                            if ((etage[indiceInitI][indiceInitJ] == 1) || (etage[indiceInitI][indiceInitJ] == 2)) {
+                                                p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage2_pion_noir.PNG"));
+                                                erreur = false;
+                                            } else {
+                                                p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
+                                                erreur = true;
+                                            }
+                                            break;
+                                        case 3:
+                                            if ((etage[indiceInitI][indiceInitJ] == 2) || (etage[indiceInitI][indiceInitJ] == 3)) {
+                                                p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage3_pion_noir.PNG"));
+                                                erreur = false;
+                                                if (etage[indiceInitI][indiceInitJ] == 2) {
+                                                    p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
+                                                }
+                                                if (etage[indiceInitI][indiceInitJ] == 3) {
+                                                    p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
+                                                }
+                                                p.dialogPerdu("GAGNER");
+                                                p.gagner();
+                                            } else {
+                                                p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
+                                                erreur = true;
+                                            }
+                                            break;
+                                        case 4:
+                                            p.dialogPerdu("Deplacement impossible");
+                                            erreur = true;
+                                            break;
+                                    }
+                                    switch (etage[indiceInitI][indiceInitJ]) {
+                                        case 0:
+                                            if (!erreur) {
+                                                m.setSol(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                            }
+                                            break;
+                                        case 1:
+                                            if (!erreur) {
+                                                m.setSol1(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                            }
+                                            break;
+                                        case 2:
+                                            if (!erreur) {
+                                                m.setSol2(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                            }
+                                            break;
+                                        case 3:
+                                            if (!erreur) {
+                                                m.setSol3(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                            }
+                                            break;
+                                    }
+
+
+                                    if (!erreur) {
+                                        p.pion[indiceSecondeI][indiceSecondeJ] = p.pion[indiceInitI][indiceInitJ];
+                                        p.pion[indiceInitI][indiceInitJ] = null;
+
+                                        m.setPionSelectionner(p.pion[indiceSecondeI][indiceSecondeJ]);
+                                        firstSelect = false;
+                                        m.setDeplacementPossible(m.getDeplacementPossible() - 1);
+                                        p.labelDeplacement.setText("" + m.getDeplacementPossible());
+                                        if (m.getDeplacementPossible() == 0) {
+                                            p.labelMessage.setText("Constuire");
+                                        }
+
+                                    }
+
+                                }
+
+                            } else {
+                                p.dialogPerdu("Deplacement impossible (deplacement en rose des sables)");
+                            }
+
+                        } else {
+                            p.dialogPerdu("Deplacement impossible (pas sur un autre pion)");
+
+                        }
+                    }
+
+
+                } else {
+
+                    // construction
+
+                    pouvoirActive = false;
 
                     firsti = actionCommande.charAt(0);
                     firstj = actionCommande.charAt(1);
                     indiceInitI = firsti - '0';
                     indiceInitJ = firstj - '0';
 
-                    if ((p.pion[indiceInitI][indiceInitJ] != null)) {
-
-                        if (tourEquipe == (p.pion[indiceInitI][indiceInitJ].getCouleur())) {
-
-                            firsti = actionCommande.charAt(0);
-                            firstj = actionCommande.charAt(1);
-
-                            indiceInitI = firsti - '0';
-                            indiceInitJ = firstj - '0';
-
-                            firstSelect = true;
-                            //p.roseDesVents(indiceInitI, indiceInitJ);
-                            p.labelMessage.setText("Cliquez sur une case pour déplacer le pion");
-
-                        } else {
-                            p.dialogPerdu("Veuillez cliquez sur un de vos pions (de meme couleur)");
-
-                        }
-
-                    } else {
-                        firstSelect = false;
-                        p.dialogPerdu("Veuillez cliquez sur un de vos pions");
-                    }
-
-
-                } else {
-
-                    indiceInitI = firsti - '0';
-                    indiceInitJ = firstj - '0';
-                    secondei = actionCommande.charAt(0);
-                    secondej = actionCommande.charAt(1);
-                    indiceSecondeI = secondei - '0';
-                    indiceSecondeJ = secondej - '0';
-
-                    int diffI = indiceInitI - indiceSecondeI;
-                    int diffJ = indiceInitJ - indiceSecondeJ;
+                    int diffI = indiceInitI - indicePionBougeeI;
+                    int diffJ = indiceInitJ - indicePionBougeeJ;
                     diffI = Math.abs(diffI);
                     diffJ = Math.abs(diffJ);
 
-
-                    // Swap
-
-                    if ((p.pion[indiceSecondeI][indiceSecondeJ] == null)) {
-
+                    if (p.pion[indiceInitI][indiceInitJ] == null) {
 
                         if ((diffI < 2 && diffJ < 2)) {
 
-                            indicePionBougeeI = indiceSecondeI;
-                            indicePionBougeeJ = indiceSecondeJ;
 
+                            switch (etage[indiceInitI][indiceInitJ]) {
+                                case 0:
+                                    m.setSol1(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                    etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
+                                    construction = true;
+                                    break;
+                                case 1:
+                                    m.setSol2(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                    etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
+                                    construction = true;
+                                    break;
+                                case 2:
+                                    m.setSol3(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                    etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
+                                    construction = true;
+                                    break;
+                                case 3:
+                                    m.setSol4(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                                    etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
+                                    construction = true;
+                                    break;
+                                case 4:
+                                    construction = false;
 
-                            if (p.pion[indiceInitI][indiceInitJ].getCouleur() == "white") {
+                            }
 
-                                switch (etage[indiceSecondeI][indiceSecondeJ]) {
-                                    case 0:
-                                        p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/pion_blanc.PNG"));
-                                        erreur = false;
-                                        break;
-                                    case 1:
-                                        p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage1_pion_blanc.PNG"));
-                                        break;
-                                    case 2:
-                                        if ((etage[indiceInitI][indiceInitJ] == 1) || (etage[indiceInitI][indiceInitJ] == 2)) {
-                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage2_pion_blanc.PNG"));
-                                            erreur = false;
-                                        } else {
-                                            p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
-                                            erreur = true;
-                                        }
-                                        break;
-                                    case 3:
-                                        if ((etage[indiceInitI][indiceInitJ] == 2) || (etage[indiceInitI][indiceInitJ] == 3)) {
-                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage3_pion_blanc.PNG"));
-                                            erreur = false;
-                                            if (etage[indiceInitI][indiceInitJ] == 2) {
-                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
-                                            }
-                                            if (etage[indiceInitI][indiceInitJ] == 3) {
-                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
-                                            }
-                                            p.dialogPerdu("GAGNER");
-                                            p.gagner();
-                                        } else {
-                                            p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
-                                            erreur = true;
-                                        }
-                                        break;
-                                    case 4:
-                                        p.dialogPerdu("Deplacement impossible");
-                                        erreur = true;
-                                        break;
-                                }
-                                switch (etage[indiceInitI][indiceInitJ]) {
-                                    case 0:
-                                        if (!erreur) {
-                                            p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/Sol5.PNG"));
-                                        }
-                                        break;
-                                    case 1:
-                                        if (!erreur) {
-                                            p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage1.PNG"));
-                                        }
-                                        break;
-                                    case 2:
-                                        if (!erreur) {
-                                            p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
-                                        }
-                                        break;
+                            if (construction) {
+                                m.setTour(m.getTour()+1);
+                                p.labelTour.setText(" " + m.getTour());
+                                m.setConstructionPossible(m.getConstructionPossible() - 1);
+                                p.labelConstruction.setText("" + m.getConstructionPossible());
 
-
-                                    case 3:
-                                        if (!erreur) {
-                                            p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
-                                        }
-                                        break;
+                                if(m.getConstructionPossible() == 0) {
+                                    m.setPionSelectionner(null);
+                                    m.setConstructionPossible(m.getConstructionPossible() + 1);
+                                    p.labelConstruction.setText("" + m.getConstructionPossible());
+                                    m.setDeplacementPossible(m.getDeplacementPossible() + 1);
+                                    p.labelDeplacement.setText("" + m.getDeplacementPossible());
+                                    p.labelMessage.setText("Joueur 1, deplacer le pion de votre choix en cliquant dessus");
                                 }
 
 
-                                if (!erreur) {
-                                    p.pion[indiceSecondeI][indiceSecondeJ] = p.pion[indiceInitI][indiceInitJ];
-                                    p.pion[indiceInitI][indiceInitJ] = null;
-                                    firstSelect = false;
-                                    mouvementPion = true;
-                                    p.labelMessage.setText("Constuire");
-
+                                if (m.getTour() % 2 == 0) {
+                                    p.labelJoueur.setText(p.joueur2.getNom() + " (blanc)");
+                                } else {
+                                    p.labelJoueur.setText(p.joueur1.getNom() + " (noir)");
                                 }
-
 
                             } else {
-                                switch (etage[indiceSecondeI][indiceSecondeJ]) {
-                                    case 0:
-                                        p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/pion_noir.PNG"));
-                                        erreur = false;
-                                        break;
-                                    case 1:
-                                        p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage1_pion_noir.PNG"));
-                                        erreur = false;
-                                        break;
-                                    case 2:
-                                        if ((etage[indiceInitI][indiceInitJ] == 1) || (etage[indiceInitI][indiceInitJ] == 2)) {
-                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage2_pion_noir.PNG"));
-                                            erreur = false;
-                                        } else {
-                                            p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
-                                            erreur = true;
-                                        }
-                                        break;
-                                    case 3:
-                                        if ((etage[indiceInitI][indiceInitJ] == 2) || (etage[indiceInitI][indiceInitJ] == 3)) {
-                                            p.tableauDeButton[indiceSecondeI][indiceSecondeJ].setIcon(new ImageIcon("imageSantorini/maison_etage3_pion_noir.PNG"));
-                                            erreur = false;
-                                            if (etage[indiceInitI][indiceInitJ] == 2) {
-                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage2.PNG"));
-                                            }
-                                            if (etage[indiceInitI][indiceInitJ] == 3) {
-                                                p.tableauDeButton[indiceInitI][indiceInitJ].setIcon(new ImageIcon("imageSantorini/maison_etage3.PNG"));
-                                            }
-                                            p.dialogPerdu("GAGNER");
-                                            p.gagner();
-                                        } else {
-                                            p.dialogPerdu("Deplacement impossible (niveau trop bas par rapport à l'etage souhaiter)");
-                                            erreur = true;
-                                        }
-                                        break;
-                                    case 4:
-                                        p.dialogPerdu("Deplacement impossible");
-                                        erreur = true;
-                                        break;
-                                }
-                                switch (etage[indiceInitI][indiceInitJ]) {
-                                    case 0:
-                                        if (!erreur) {
-                                            m.setSol(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                        }
-                                        break;
-                                    case 1:
-                                        if (!erreur) {
-                                            m.setSol1(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                        }
-                                        break;
-                                    case 2:
-                                        if (!erreur) {
-                                            m.setSol2(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                        }
-                                        break;
-                                    case 3:
-                                        if (!erreur) {
-                                            m.setSol3(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                        }
-                                        break;
-                                }
-
-
-                                if (!erreur) {
-                                    p.pion[indiceSecondeI][indiceSecondeJ] = p.pion[indiceInitI][indiceInitJ];
-                                    p.pion[indiceInitI][indiceInitJ] = null;
-                                    firstSelect = false;
-                                    mouvementPion = true;
-                                    p.labelMessage.setText("Constuire");
-
-                                }
+                                p.dialogPerdu("construction impossible");
 
                             }
 
                         } else {
-                            p.dialogPerdu("Deplacement impossible (deplacement en rose des sables)");
+                            p.dialogPerdu("construction impossible (chosir une case adjacente)");
+
                         }
-
                     } else {
-                        p.dialogPerdu("Deplacement impossible (pas sur un autre pion)");
 
+                        p.dialogPerdu("construction impossible");
                     }
-                }
 
+                }
 
             } else {
 
-                // construction
+                //tour d'initialisation pion
 
                 firsti = actionCommande.charAt(0);
                 firstj = actionCommande.charAt(1);
                 indiceInitI = firsti - '0';
                 indiceInitJ = firstj - '0';
 
-                int diffI = indiceInitI - indicePionBougeeI;
-                int diffJ = indiceInitJ - indicePionBougeeJ;
-                diffI = Math.abs(diffI);
-                diffJ = Math.abs(diffJ);
 
-                if (p.pion[indiceInitI][indiceInitJ] == null) {
+                if (m.getTour() % 2 == 0) {
+                    piece = new Piece("white");
+                    piece.setCouleur("white");
 
-                    if ((diffI < 2 && diffJ < 2)) {
+                    if (p.pion[indiceInitI][indiceInitJ] == null) {
 
 
-                        switch (etage[indiceInitI][indiceInitJ]) {
-                            case 0:
-                                m.setSol1(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
-                                construction = true;
-                                break;
-                            case 1:
-                                m.setSol2(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
-                                construction = true;
-                                break;
-                            case 2:
-                                m.setSol3(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
-                                construction = true;
-                                break;
-                            case 3:
-                                m.setSol4(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                                etage[indiceInitI][indiceInitJ] = etage[indiceInitI][indiceInitJ] + 1;
-                                construction = true;
-                                break;
-                            case 4:
-                                construction = false;
+                        piece.setPion(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                        p.pion[indiceInitI][indiceInitJ] = piece;
+                        m.setTour(m.getTour()+1);
+                        p.labelMessage.setText("Cliquez sur une case pour placer le " + m.getTour() + "ème pion");
+                        p.labelTour.setText("initialisation " + m.getTour());
 
-                        }
-
-                        if (construction) {
-                            tour++;
-                            p.labelTour.setText(" " + tour);
-                            mouvementPion = false;
+                        if (m.getTour() == 5) {
+                            p.labelTour.setText(" " + m.getTour());
                             p.labelMessage.setText("Joueur 1, deplacer le pion de votre choix en cliquant dessus");
-
-
-                            if (tour % 2 == 0) {
-                                p.labelJoueur.setText("Victor (blanc)");
-                            } else {
-                                p.labelJoueur.setText("Thomas (noir)");
-                            }
-
-                        } else {
-                            p.dialogPerdu("construction impossible");
-
                         }
 
-                    } else {
-                        p.dialogPerdu("construction impossible (chosir une case adjacente)");
+
+                        if (m.getTour()% 2 == 0) {
+                            p.labelJoueur.setText(p.joueur2.getNom() + " (blanc)");
+                        } else {
+                            p.labelJoueur.setText(p.joueur1.getNom() + " (noir)");
+                        }
 
                     }
                 } else {
+                    piece = new Piece("black");
+                    piece.setCouleur("black");
 
-                    p.dialogPerdu("construction impossible");
-                }
+                    if (p.pion[indiceInitI][indiceInitJ] == null) {
 
-            }
+                        piece.setPion(p.tableauDeButton[indiceInitI][indiceInitJ]);
+                        p.pion[indiceInitI][indiceInitJ] = piece;
+                        m.setTour(m.getTour()+1);
+                        p.labelMessage.setText("Cliquez sur une case pour placer le " + m.getTour() + "ème pion");
+                        p.labelTour.setText("initialisation " + m.getTour());
 
-        } else {
-
-            //tour d'initialisation pion
-
-            firsti = actionCommande.charAt(0);
-            firstj = actionCommande.charAt(1);
-            indiceInitI = firsti - '0';
-            indiceInitJ = firstj - '0';
-
-
-            if (tour % 2 == 0) {
-                piece = new Piece("white");
-                piece.setCouleur("white");
-
-                if (p.pion[indiceInitI][indiceInitJ] == null) {
-
-
-                    piece.setPion(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                    p.pion[indiceInitI][indiceInitJ] = piece;
-                    tour++;
-                    p.labelMessage.setText("Cliquez sur une case pour placer le " + tour + "ème pion");
-                    p.labelTour.setText("initialisation " + tour);
-
-                    if (tour == 5) {
-                        p.labelTour.setText(" " + tour);
-                        p.labelMessage.setText("Joueur 1, deplacer le pion de votre choix en cliquant dessus");
-                    }
-
-
-                    if (tour % 2 == 0) {
-                        p.labelJoueur.setText("Victor (blanc)");
-                    } else {
-                        p.labelJoueur.setText("Thomas (noir)");
-                    }
-
-                }
-            } else {
-                piece = new Piece("black");
-                piece.setCouleur("black");
-
-                if (p.pion[indiceInitI][indiceInitJ] == null) {
-
-                    piece.setPion(p.tableauDeButton[indiceInitI][indiceInitJ]);
-                    p.pion[indiceInitI][indiceInitJ] = piece;
-                    tour++;
-                    p.labelMessage.setText("Cliquez sur une case pour placer le " + tour + "ème pion");
-                    p.labelTour.setText("initialisation " + tour);
-
-                    if (tour == 5) {
-                        p.labelTour.setText(" " + tour);
-                    }
-                    if (tour % 2 == 0) {
-                        p.labelJoueur.setText("Victor (blanc)");
-                    } else {
-                        p.labelJoueur.setText("Thomas (noir)");
+                        if (m.getTour() == 5) {
+                            p.labelTour.setText(" " + m.getTour());                        }
+                        if (m.getTour() % 2 == 0) {
+                            p.labelJoueur.setText(p.joueur2.getNom() + " (blanc)");
+                        } else {
+                            p.labelJoueur.setText(p.joueur1.getNom() + " (noir)");
+                        }
                     }
                 }
             }

@@ -9,7 +9,6 @@ public class ControlGroup {
 
         this.m = m;
         p = new Plateau(m);
-        controlb = new Controller(p, m);
 
     }
 

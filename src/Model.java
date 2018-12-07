@@ -2,15 +2,33 @@ import javax.swing.*;
 
 public class Model {
 
-    private int tour;
+    private static int tour = 1;
+    private static int deplacementPossible = 1;
+    private static int constructionPossible = 1;
+    private Piece PionSelectionner;
 
+    public static int getDeplacementPossible() {
+        return deplacementPossible;
+    }
 
-    public int getTour() {
+    public static void setDeplacementPossible(int deplacementPossible) {
+        Model.deplacementPossible = deplacementPossible;
+    }
+
+    public static int getConstructionPossible() {
+        return constructionPossible;
+    }
+
+    public static void setConstructionPossible(int constructionPossible) {
+        Model.constructionPossible = constructionPossible;
+    }
+
+    public static int getTour() {
         return tour;
     }
 
-    public void setTour(int tour) {
-        this.tour = tour;
+    public static void setTour(int tour) {
+        Model.tour = tour;
     }
 
 
@@ -82,6 +100,11 @@ public class Model {
     }
 
 
+    public Piece getPionSelectionner() {
+        return PionSelectionner;
+    }
 
-
+    public void setPionSelectionner(Piece pionSelectionner) {
+        PionSelectionner = pionSelectionner;
+    }
 }
