@@ -4,10 +4,18 @@ public class Joueur {
     int id;
     Hero hero;
     Pouvoir pouvoir;
+    private String couleur;
+
 
     public Joueur(String nom, int id) {
         this.nom = nom;
         this.id = id;
+    }
+
+    public Joueur(String nom, int id, String couleur) {
+        this.nom = nom;
+        this.id = id;
+        this.couleur = couleur;
     }
 
     public Joueur(String nom, int id, Hero hero) {
@@ -46,5 +54,12 @@ public class Joueur {
     }
 
 
+    public String getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
 }
 

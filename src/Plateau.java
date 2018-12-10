@@ -12,13 +12,14 @@ class Plateau extends JFrame implements ActionListener {
     Controller controlb;
     JButton but;
     JButton pouvoir;
+    JButton annuler;
     JButton tableauDeButton[][];
     Joueur joueur1;
     Joueur joueur2;
     JButton quitter = new JButton("quitter");
     JButton restart = new JButton("rejouer");
     Piece pion[][] = new Piece[6][6];
-    String[] nom = {"default", "Achilles", "Aeolus", "Aphrodite", "Apollo", "Ares", "Artemis", "Atalanta", "Athena", "Atlas", "Bellerophon"};
+    String[] nom = {"default", "Achilles", "Aeolus", "Aphrodite", "Apollo", "Ares", "Artemis", "Atalanta", "Athena", "Atlas", "Bellerophon", "Bia", "Charon", "Charybdis", "Chronos", "Clio", "Demeter", "Dionysus", "Eros", "Gaia", "Graea", "Hades", "Hecate", "Hera", "Heraclas", "Hermes", "Limos", "Medusa", "Morpheus", "Nemesis", "Pan", "Persephone", "Polyphemus", "Poseidon", "Selene", "Theseus", "Triton"};
     Hero[] tableauHero;
     static String heroChoisis = "";
     JLabel labelMessage;
@@ -28,20 +29,25 @@ class Plateau extends JFrame implements ActionListener {
     JLabel labelDeplacement;
     Model m;
     JPanel panel3;
+    JLabel tf_notice;
 
+    JLabel titre;
     JTextField Text_Player_name;
     JTextField Text_Player_name2;
     JPanel Page_Selection_nom;
     JPanel Page_Selection_nom2;
     JButton Validation_player;
 
-
+    JPanel titre_panel;
     JPanel nom_panel;
     JPanel nom_panel2;
     JPanel validation_panel;
     JLabel nom_formulaire;
     JLabel nom_formulaire2;
-
+    JPanel notice_panel;
+    JPanel liste_panel;
+    JLabel tf_liste;
+    JPanel image_panel;
 
 
     JTextField Text_Player_Age;
@@ -51,15 +57,22 @@ class Plateau extends JFrame implements ActionListener {
     JLabel Age_formulaire2;
     JPanel age_panel2;
     JLabel Image;
-
+    JLabel pouvoir_label;
+    JLabel activationPouvoir_label;
+    JLabel labelTeam;
 
     JComboBox liste1;
     JPanel panel1 = new JPanel();
     ImageIcon image;
     JPanel panel2 = new JPanel();
+
     JLabel imagelabel;
 
     JButton bChangerPanel = new JButton("valider");
+
+
+    private JLabel monLabel;
+    private ImageIcon monIcone;
 
 
     public Plateau(Model m) {
@@ -72,42 +85,259 @@ class Plateau extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void roseDesVents(int i, int j) {
-        if (pion[i + 1][j] == null) {
-            //tableauDeButton[i+1][j].setIcon(new ImageIcon(""));
-        }
+    public void roseDesVents(int i, int j, boolean bool) {
+        if(bool) {
+            if (((i+1)<6) && pion[i + 1][j] == null) {
+                if(m.etageRechercher(i+1,j) == 0) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i + 1,j,1);
+                }
+                if(m.etageRechercher(i+1,j) == 1) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i + 1, j, 1);
+                }
+                if((m.etageRechercher(i+1,j) == 2) && (m.etageRechercher(i,j) == 1)) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i + 1, j, 1);
+                }
+                if((m.etageRechercher(i+1,j) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i + 1, j, 1);
+                }
+                if((m.etageRechercher(i+1,j) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i + 1, j, 1);
+                }
+                if((m.etageRechercher(i+1,j) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i + 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i + 1, j, 1);
+                }
+            }
 
-        if (pion[i][j + 1] == null) {
-            //tableauDeButton[i][j+1].setIcon(new ImageIcon(""));
-        }
+            if (((j+1)<6) && pion[i][j + 1] == null ) {
+                if(m.etageRechercher(i,j+1) == 0) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+                if(m.etageRechercher(i,j+1) == 1) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+                if((m.etageRechercher(i,j+1) == 2) && (m.etageRechercher(i,j) == 1)) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+                if((m.etageRechercher(i,j+1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+                if((m.etageRechercher(i,j+1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+                if((m.etageRechercher(i,j+1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i, j + 1, 1);
+                }
+            }
 
-        if (pion[i - 1][j] == null) {
-            //tableauDeButton[i-1][j].setIcon(new ImageIcon(""));
-        }
+            if (((i-1)>=0) && pion[i - 1][j] == null ) {
+                if(m.etageRechercher(i-1,j) == 0) {
+                    tableauDeButton[i - 1][j].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i - 1,j,1);
+                }
+                if(m.etageRechercher(i-1,j) == 1) {
+                    tableauDeButton[i - 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i - 1, j, 1);
+                }
+                if((m.etageRechercher(i-1,j) == 2) && (m.etageRechercher(i,j) == 1)) {
+                    tableauDeButton[i - 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i - 1, j, 1);
+                }
+                if((m.etageRechercher( i- 1,j) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[ i- 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif( i- 1, j, 1);
+                }
+                if((m.etageRechercher( i- 1,j) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[ i- 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif( i- 1, j, 1);
+                }
+                if((m.etageRechercher( i- 1,j) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[ i- 1][j].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif( i- 1, j, 1);
+                }
+            }
 
-        if (pion[i + 1][j - 1] == null) {
-            //tableauDeButton[i+1][j-1].setIcon(new ImageIcon(""));
-        }
+            if (((i+1)<6) && ((j-1)>=0) && pion[i + 1][j - 1] == null ) {
+                if(m.etageRechercher(i+1,j-1) == 0) {
+                    tableauDeButton[i + 1][j-1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i+1,j-1,1);
+                }
+                if(m.etageRechercher(i+1,j-1) == 1) {
+                    tableauDeButton[i + 1][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i+1,j-1, 1);
+                }
+                if((m.etageRechercher(i+1,j-1) == 2) && (m.etageRechercher(i,j) == 1)) {
+                    tableauDeButton[i + 1][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i+1,j-1, 1);
+                }
+                if((m.etageRechercher(i+1,j-1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i+1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i+1, j - 1, 1);
+                }
+                if((m.etageRechercher(i+1,j-1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i+1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i+1, j - 1, 1);
+                }
+                if((m.etageRechercher(i+1,j-1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i+1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i+1, j - 1, 1);
+                }
+            }
 
-        if (pion[i - 1][j - 1] == null) {
-            //tableauDeButton[i-1][j-1].setIcon(new ImageIcon(""));
-        }
+            if (((i-1)>=0) && ((j-1)>=0) && pion[i - 1][j - 1] == null) {
+                if(m.etageRechercher(i-1,j-1) == 0) {
+                    tableauDeButton[i - 1][j-1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i-1,j-1,1);
+                }
+                if(m.etageRechercher(i-1,j-1) == 1) {
+                    tableauDeButton[i - 1][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i-1,j-1, 1);
+                }
+                if(((m.etageRechercher(i-1,j-1) == 2) && (m.etageRechercher(i,j) == 1))) {
+                    tableauDeButton[i - 1][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i-1,j-1, 1);
+                }
+                if((m.etageRechercher(i-1,j-1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i-1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i-1, j - 1, 1);
+                }
+                if((m.etageRechercher(i-1,j-1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i-1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i-1, j - 1, 1);
+                }
+                if((m.etageRechercher(i-1,j-1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i-1][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i-1, j - 1, 1);
+                }
+            }
 
-        if (pion[i + 1][j + 1] == null) {
-            //tableauDeButton[i+1][j+1].setIcon(new ImageIcon(""));
-        }
+            if (((i+1)<6) && ((j+1)<6) && pion[i + 1][j + 1] == null ) {
+                if(m.etageRechercher(i+1,j+1) == 0) {
+                    tableauDeButton[i + 1][j+1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i+1,j+1,1);
+                }
+                if(m.etageRechercher(i+1,j+1) == 1) {
+                    tableauDeButton[i + 1][j+1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i+1,j+1, 1);
+                }
+                if(((m.etageRechercher(i+1,j+1) == 2) && (m.etageRechercher(i,j) == 1))) {
+                    tableauDeButton[i + 1][j+1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i+1,j+1, 1);
+                }
+                if((m.etageRechercher(i+1,j+1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i+1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i+1, j + 1, 1);
+                }
+                if((m.etageRechercher(i+1,j+1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i+1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i+1, j + 1, 1);
+                }
+                if((m.etageRechercher(i+1,j+1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i+1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i+1, j + 1, 1);
+                }
+            }
 
-        if (pion[i - 1][j + 1] == null) {
-            //tableauDeButton[i-1][j+1].setIcon(new ImageIcon(""));
-        }
+            if (((i-1)>=0) && ((j+1)<6) && pion[i - 1][j + 1] == null ) {
+                if(m.etageRechercher(i-1,j+1) == 0) {
+                    tableauDeButton[i - 1][j+1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i-1,j+1,1);
+                }
+                if(m.etageRechercher(i-1,j+1) == 1) {
+                    tableauDeButton[i - 1][j+1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i-1,j+1, 1);
+                }
+                if(((m.etageRechercher(i-1,j+1) == 2) && (m.etageRechercher(i,j) == 1))) {
+                    tableauDeButton[i - 1][j+1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i-1,j+1, 1);
+                }
+                if((m.etageRechercher(i-1,j+1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i-1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i-1, j + 1, 1);
+                }
+                if((m.etageRechercher(i-1,j+1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i-1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i-1, j + 1, 1);
+                }
+                if((m.etageRechercher(i-1,j+1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i-1][j + 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i-1, j + 1, 1);
+                }
+            }
 
-        if (pion[i][j - 1] == null) {
-            //tableauDeButton[i][j-1].setIcon(new ImageIcon(""));
+            if (((j-1)>=0) && pion[i][j - 1] == null ) {
+                if(m.etageRechercher(i,j-1) == 0) {
+                    tableauDeButton[i][j-1].setIcon(new ImageIcon("imageSantorini/Sol_opacity.png"));
+                    m.opacityModif(i,j-1,1);
+                }
+                if(m.etageRechercher(i,j-1) == 1) {
+                    tableauDeButton[i][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i,j-1, 1);
+                }
+                if(m.etageRechercher(i,j-1) == 1) {
+                    tableauDeButton[i][j-1].setIcon(new ImageIcon("imageSantorini/maison_etage1_opacity.png"));
+                    m.opacityModif(i,j-1, 1);
+                }
+                if((m.etageRechercher(i,j-1) == 2) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage2_opacity.png"));
+                    m.opacityModif(i, j - 1, 1);
+                }
+                if((m.etageRechercher(i,j-1) == 3) && (m.etageRechercher(i,j) == 2)) {
+                    tableauDeButton[i][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i, j - 1, 1);
+                }
+                if((m.etageRechercher(i,j-1) == 3) && (m.etageRechercher(i,j) == 3)) {
+                    tableauDeButton[i][j - 1].setIcon(new ImageIcon("imageSantorini/maison_etage3_opacity.png"));
+                    m.opacityModif(i, j - 1, 1);
+                }
+            }
+        }
+        else{
+            for (int k = 0; k < 6; k++) {
+                for (int l = 0; l < 6; l++) {
+                    if(m.opacityRechercher(k,l) == 1){
+                        if(m.etageRechercher(k,l) == 0) {
+                            tableauDeButton[k][l].setIcon(new ImageIcon("imageSantorini/Sol.png"));
+                        }
+                        if(m.etageRechercher(k,l) == 1) {
+                            tableauDeButton[k][l].setIcon(new ImageIcon("imageSantorini/maison_etage1.png"));
+                        }
+                        if(m.etageRechercher(k,l) == 2) {
+                            tableauDeButton[k][l].setIcon(new ImageIcon("imageSantorini/maison_etage2.png"));
+                        }
+                        if(m.etageRechercher(k,l) == 3) {
+                            tableauDeButton[k][l].setIcon(new ImageIcon("imageSantorini/maison_etage3.png"));
+                        }
+                        m.opacityModif(k,l,0);
+                    }
+                }
+
+            }
         }
 
     }
 
     public void pageConnexion() {
+
+        // Santorini Titre
+
+        titre = new JLabel("SANTORINI");
+        Font f = new Font("Serif", Font.PLAIN, 36); // par exemple
+        titre.setFont(f);
+        titre_panel = new JPanel();
+        titre_panel.add(titre);
+
 
         //        Nom Player 1
         Text_Player_name = new JTextField();
@@ -131,8 +361,7 @@ class Plateau extends JFrame implements ActionListener {
         panel_joueur1.add(ta_joueur1);
         panel_joueur1.add(nom_panel);
         panel_joueur1.add(age_panel);
-        panel_joueur1.setSize(new Dimension(10,10));
-
+        panel_joueur1.setSize(new Dimension(10, 10));
 
 
         //        Nom Player 2
@@ -143,7 +372,7 @@ class Plateau extends JFrame implements ActionListener {
         nom_panel2.add(nom_formulaire2);
         nom_panel2.add(Text_Player_name2);
 
-//        age player 2
+        //        age player 2
         Text_Player_Age2 = new JTextField();
         Age_formulaire2 = new JLabel("Age :");
         Text_Player_Age2.setPreferredSize(new Dimension(100, 20));
@@ -157,50 +386,68 @@ class Plateau extends JFrame implements ActionListener {
         panel_joueur2.add(ta_joueur2);
         panel_joueur2.add(nom_panel2);
         panel_joueur2.add(age_panel2);
-        panel_joueur2.setPreferredSize(new Dimension(10,10));
+        panel_joueur2.setPreferredSize(new Dimension(10, 10));
 
 
 //        Valider
         Validation_player = new JButton("valider");
         Validation_player.addActionListener(this);
+        this.bChangerPanel.addActionListener(new EcouteurBoutonChanger());
         validation_panel = new JPanel();
-        validation_panel.add(Validation_player);
+        validation_panel.add(bChangerPanel);
         Image = new JLabel();
 
 
+        panel1.add(titre_panel);
         panel1.add(panel_joueur1);
-
         panel1.add(panel_joueur2);
+        panel1.add(validation_panel);
+
 
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-        panel1.setPreferredSize(new Dimension(10,10));
+        panel1.setPreferredSize(new Dimension(10, 10));
 
 
 
+        //        liste
+        tf_liste = new JLabel("Liste des Heros et Dieu");
+        liste_panel = new JPanel();
+        liste_panel.add(tf_liste);
         JComboBox liste1 = new JComboBox();
-
-
         for (int i = 0; i < nom.length; i++) {
             String temp = nom[i];
             liste1.addItem(temp);
-
         }
+        liste_panel.add(liste1);
+        liste_panel.setSize(new Dimension(800, 200));
 
 
-        JTextArea tf_notice = new JTextArea("Joueur 1 : Veuillez choisir un hero ou dieu");
-        this.panel2.add(tf_notice);
-        this.panel2.add(liste1);
-        ImageIcon icone = new ImageIcon("");
-        JLabel image = new JLabel(icone);
-        image.setSize(panel2.getWidth(), panel2.getHeight());
-        panel2.add(image);
+
+        //        Notice
+        tf_notice = new JLabel("Joueur 1 : Veuillez choisir un hero ou dieu");
+        Font f2 = new Font("Serif", Font.PLAIN, 20); // par exemple
+        tf_notice.setFont(f2);
+        notice_panel = new JPanel();
+        notice_panel.add(tf_notice);
+        notice_panel.setSize(new Dimension(800, 200));
+
+
+        this.panel2.add(notice_panel);
+        this.panel2.add(liste_panel);
+
+
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+
+
         panel2.repaint();
-        this.setSize(500, 250);
+        this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.bChangerPanel.addActionListener(new EcouteurBoutonChanger());
-        this.panel1.add(this.bChangerPanel);
+
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+
+
         this.setContentPane(this.panel1);
         this.panel1.setBackground(Color.white);
         this.panel2.setBackground(Color.white);
@@ -212,123 +459,53 @@ class Plateau extends JFrame implements ActionListener {
                 String s = (String) liste1.getSelectedItem();//get the selected item
                 panel2.removeAll();
                 panel2.repaint();
-                panel2.add(liste1);
+                tf_liste = new JLabel("Liste des Heros et Dieu");
+                liste_panel = new JPanel();
+                liste_panel.add(tf_liste);
+                liste_panel.add(liste1);
+                JComboBox liste1 = new JComboBox();
+                liste_panel.setSize(new Dimension(800, 200));
+                tf_notice = new JLabel(joueur1.getNom() + " : Veuillez choisir un hero ou dieu");
+                Font f2 = new Font("Serif", Font.PLAIN, 20); // par exemple
+                tf_notice.setFont(f2);
+                notice_panel = new JPanel();
+                notice_panel.add(tf_notice);
+                notice_panel.setSize(new Dimension(800, 200));
+
+                image_panel = new JPanel();
+                image_panel.setSize(new Dimension(800, 200));
+
+
+                panel2.add(notice_panel);
+                panel2.add(liste_panel);
+
                 JPanel jp_validate = new JPanel();
                 JButton bt_valider = new JButton("valider");
                 bt_valider.addActionListener(new EcouteurBoutonValiderJoueur1());
                 heroChoisis = s;
 
-                switch (s) {//check for a match
-                    case "default":
-                        dialogPerdu("Choisis un hero ou dieu");
-                        ImageIcon icone3 = new ImageIcon("");
-                        JLabel image3 = new JLabel(icone3);
-                        image3.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image3);
-                        panel2.repaint();
-                        break;
+                panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 
-                    case "Achilles":
-                        ImageIcon icone2 = new ImageIcon("imageSantorini/Achilles.png");
-                        JLabel image2 = new JLabel(icone2);
-                        image2.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image2);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Aeolus":
-                        ImageIcon icone = new ImageIcon("imageSantorini/Aeolus.PNG");
-                        JLabel image = new JLabel(icone);
-                        image.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Aphrodite":
-                        ImageIcon icone12 = new ImageIcon("imageSantorini/Aphrodite.PNG");
-                        JLabel image12 = new JLabel(icone12);
-                        image12.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image12);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Apollo":
-                        ImageIcon icone4 = new ImageIcon("imageSantorini/Apollo.PNG");
-                        JLabel image4 = new JLabel(icone4);
-                        image4.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image4);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Ares":
-                        ImageIcon icone5 = new ImageIcon("imageSantorini/Ares.PNG");
-                        JLabel image5 = new JLabel(icone5);
-                        image5.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image5);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Artemis":
-                        ImageIcon icone6 = new ImageIcon("imageSantorini/Artemis.PNG");
-                        JLabel image6 = new JLabel(icone6);
-                        image6.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image6);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Atalanta":
-                        ImageIcon icone7 = new ImageIcon("imageSantorini/Atalanta.PNG");
-                        JLabel image7 = new JLabel(icone7);
-                        image7.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image7);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Athena":
-                        ImageIcon icone8 = new ImageIcon("imageSantorini/Athena.PNG");
-                        JLabel image8 = new JLabel(icone8);
-                        image8.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image8);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Atlas":
-                        ImageIcon icone9 = new ImageIcon("imageSantorini/Atlas.PNG");
-                        JLabel image9 = new JLabel(icone9);
-                        image9.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image9);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Bellerophon":
-                        ImageIcon icone10 = new ImageIcon("imageSantorini/Bellerophon.PNG");
-                        JLabel image10 = new JLabel(icone10);
-                        image10.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image10);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
+
+                if (s.equals("default")) {
+                    dialogPerdu("Choisis un hero ou dieu");
+                    panel2.add(notice_panel);
+                    panel2.add(liste_panel);
+                    panel2.validate();
+                    panel2.repaint();
+                } else {
+                    ImageIcon icone2 = new ImageIcon("imageSantorini/" + heroChoisis + ".png");
+                    JLabel image2 = new JLabel(icone2);
+                    image2.setSize(panel2.getWidth(), panel2.getHeight());
+                    image_panel.add(image2);
+                    panel2.add(image_panel);
+                    jp_validate.add(bt_valider);
+                    panel2.add(jp_validate);
+                    panel2.validate();
+                    panel2.repaint();
                 }
+
+
             }
         });
 
@@ -342,7 +519,7 @@ class Plateau extends JFrame implements ActionListener {
         this.repaint();
         initPLateau();
         labelTour.setText("initialisation 1");
-        labelJoueur.setText(joueur1.getNom() + " (noir)");
+        labelJoueur.setText(joueur1.getNom());
         labelMessage.setText("Cliquez sur une case pour placer le 1er pion");
 
     }
@@ -409,6 +586,8 @@ class Plateau extends JFrame implements ActionListener {
         quitter.addActionListener(listener);
         restart.addActionListener(listener);
         pouvoir.addActionListener(listener);
+        annuler.addActionListener(listener);
+
 
     }
 
@@ -480,17 +659,38 @@ class Plateau extends JFrame implements ActionListener {
         p5.add(labelJoueur);
 
 
+
+        JPanel p14 = new JPanel();
+        p14.setPreferredSize(new Dimension(100, 20));
+        p14.add(new JLabel("Team :   "));
+        labelTeam = new JLabel(joueur1.getCouleur());
+        p14.add(labelTeam);
+
+        JPanel pinfojoueur = new JPanel();
+        pinfojoueur.setPreferredSize(new Dimension(100, 20));
+        pinfojoueur.setLayout(new BoxLayout(pinfojoueur, BoxLayout.X_AXIS));
+        annuler = new JButton("annuler");
+        pinfojoueur.add(p5);
+        pinfojoueur.add(annuler);
+        pinfojoueur.add(p14);
+
+
+
         JPanel p6 = new JPanel();
         p6.setPreferredSize(new Dimension(100, 40));
+        pouvoir_label = new JLabel("Pouvoir   :  " + joueur1.getHero().getNomHero()+ "      ");
         pouvoir = new JButton("pouvoir");
+        activationPouvoir_label = new JLabel("Mode   :  FALSE ");
+        p6.add(pouvoir_label);
         p6.add(pouvoir);
+        p6.add(activationPouvoir_label);
 
 
         JPanel pBoxGlobal = new JPanel();
         pBoxGlobal.setLayout(new BoxLayout(pBoxGlobal, BoxLayout.Y_AXIS));
         pBoxGlobal.add(p);
         pBoxGlobal.add(pglob);
-        pBoxGlobal.add(p5);
+        pBoxGlobal.add(pinfojoueur);
         pBoxGlobal.add(p2);
         pBoxGlobal.add(p6);
 
@@ -534,22 +734,22 @@ class Plateau extends JFrame implements ActionListener {
                 dialogPerdu("Veuillez rentrer les informations des joueurs");
             } else {
 
-                try{
+                try {
                     age_joueur1 = Integer.valueOf(Text_Player_Age.getText());
                     age_joueur2 = Integer.valueOf(Text_Player_Age2.getText());
 
-                    if(age_joueur1 < age_joueur2) {
-                        joueur1 = new Joueur(Text_Player_name.getText(), 1);
-                        joueur2 = new Joueur(Text_Player_name2.getText(), 2);
+                    if (age_joueur1 < age_joueur2) {
+                        joueur1 = new Joueur(Text_Player_name.getText(), 1, "rouge");
+                        joueur2 = new Joueur(Text_Player_name2.getText(), 2, "blanc");
+                    } else {
+                        joueur2 = new Joueur(Text_Player_name.getText(), 1, "blanc");
+                        joueur1 = new Joueur(Text_Player_name2.getText(), 2, "rouge");
                     }
-                    else {
-                        joueur2 = new Joueur(Text_Player_name.getText(), 1);
-                        joueur1 = new Joueur(Text_Player_name2.getText(), 2);
-                    }
+
+                    tf_notice.setText(joueur1.getNom() + " : Veuillez choisir un hero ou dieu");
                     changerMenu();
 
-                }
-                catch(Exception e1) {
+                } catch (Exception e1) {
                     dialogPerdu("Veuillez saisir un age correct");
                 }
 
@@ -587,28 +787,36 @@ class Plateau extends JFrame implements ActionListener {
 
         panel2.removeAll();
 
+        tf_liste = new JLabel("Liste des Heros et Dieu");
+        liste_panel = new JPanel();
+        liste_panel.add(tf_liste);
         JComboBox liste2 = new JComboBox();
 
         for (int i = 0; i < nom.length; i++) {
-            if(heroChoisis.equals(nom[i])){
+            if (heroChoisis.equals(nom[i])) {
 
-            }
-            else{
+            } else {
                 String temp = nom[i];
                 liste2.addItem(temp);
             }
 
         }
+        liste_panel.add(liste2);
+        liste_panel.setSize(new Dimension(800, 200));
+        tf_notice = new JLabel(joueur2.getNom() +" : Veuillez choisir un hero ou dieu");
+        Font f2 = new Font("Serif", Font.PLAIN, 20); // par exemple
+        tf_notice.setFont(f2);
+        notice_panel = new JPanel();
+        notice_panel.add(tf_notice);
+        notice_panel.setSize(new Dimension(800, 200));
 
-        JTextArea tf_notice = new JTextArea("Joueur 2 : Veuillez choisir un hero ou dieu");
-        this.panel2.add(tf_notice);
-        this.panel2.add(liste2);
-        ImageIcon icone = new ImageIcon("");
-        JLabel image = new JLabel(icone);
-        image.setSize(panel2.getWidth(), panel2.getHeight());
-        panel2.add(image);
+        this.panel2.add(notice_panel);
+        this.panel2.add(liste_panel);
+
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+
         panel2.repaint();
-        this.setSize(500, 250);
+        this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -626,129 +834,53 @@ class Plateau extends JFrame implements ActionListener {
                 String s = (String) liste2.getSelectedItem();//get the selected item
                 panel2.removeAll();
                 panel2.repaint();
-                panel2.add(liste2);
+                tf_liste = new JLabel("Liste des Heros et Dieu");
+                liste_panel = new JPanel();
+                liste_panel.add(tf_liste);
+                liste_panel.add(liste2);
+                JComboBox liste2 = new JComboBox();
+                liste_panel.setSize(new Dimension(800, 200));
+                tf_notice = new JLabel(joueur2.getNom() + " : Veuillez choisir un hero ou dieu");
+                Font f2 = new Font("Serif", Font.PLAIN, 20); // par exemple
+                tf_notice.setFont(f2);
+                notice_panel = new JPanel();
+                notice_panel.add(tf_notice);
+                notice_panel.setSize(new Dimension(800, 200));
+
+                image_panel = new JPanel();
+                image_panel.setSize(new Dimension(800, 200));
+
+
+                panel2.add(notice_panel);
+                panel2.add(liste_panel);
+
                 JPanel jp_validate = new JPanel();
                 JButton bt_valider = new JButton("valider");
                 bt_valider.addActionListener(new EcouteurBoutonValider());
                 heroChoisis = s;
 
+                panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 
-                switch (s) {//check for a match
-                    case "default":
-                        dialogPerdu("Choisis un hero ou dieu");
-                        ImageIcon icone3 = new ImageIcon("");
-                        JLabel image3 = new JLabel(icone3);
-                        image3.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image3);
-                        panel2.repaint();
-                        break;
-
-                    case "Achilles":
-
-                        ImageIcon icone2 = new ImageIcon("imageSantorini/Achilles.png");
-                        JLabel image2 = new JLabel(icone2);
-                        image2.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image2);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Aeolus":
-                        ImageIcon icone = new ImageIcon("imageSantorini/Aeolus.PNG");
-                        JLabel image = new JLabel(icone);
-                        image.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Aphrodite":
-                        ImageIcon icone12 = new ImageIcon("imageSantorini/Aphrodite.PNG");
-                        JLabel image12 = new JLabel(icone12);
-                        image12.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image12);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Apollo":
-                        ImageIcon icone4 = new ImageIcon("imageSantorini/Apollo.PNG");
-                        JLabel image4 = new JLabel(icone4);
-                        image4.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image4);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Ares":
-                        ImageIcon icone5 = new ImageIcon("imageSantorini/Ares.PNG");
-                        JLabel image5 = new JLabel(icone5);
-                        image5.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image5);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Artemis":
-                        ImageIcon icone6 = new ImageIcon("imageSantorini/Artemis.PNG");
-                        JLabel image6 = new JLabel(icone6);
-                        image6.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image6);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Atalanta":
-                        ImageIcon icone7 = new ImageIcon("imageSantorini/Atalanta.PNG");
-                        JLabel image7 = new JLabel(icone7);
-                        image7.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image7);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Athena":
-                        ImageIcon icone8 = new ImageIcon("imageSantorini/Athena.PNG");
-                        JLabel image8 = new JLabel(icone8);
-                        image8.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image8);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Atlas":
-                        ImageIcon icone9 = new ImageIcon("imageSantorini/Atlas.PNG");
-                        JLabel image9 = new JLabel(icone9);
-                        image9.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image9);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
-                    case "Bellerophon":
-                        ImageIcon icone10 = new ImageIcon("imageSantorini/Bellerophon.PNG");
-                        JLabel image10 = new JLabel(icone10);
-                        image10.setSize(panel2.getWidth(), panel2.getHeight());
-                        panel2.add(image10);
-                        jp_validate.add(bt_valider);
-                        panel2.add(jp_validate);
-                        panel2.validate();
-                        panel2.repaint();
-                        break;
+                if (s.equals("default")) {
+                    dialogPerdu("Choisis un hero ou dieu");
+                    panel2.add(notice_panel);
+                    panel2.add(liste_panel);
+                    panel2.validate();
+                    panel2.repaint();
+                } else {
+                    ImageIcon icone2 = new ImageIcon("imageSantorini/" + heroChoisis + ".png");
+                    JLabel image2 = new JLabel(icone2);
+                    image2.setSize(panel2.getWidth(), panel2.getHeight());
+                    image_panel.add(image2);
+                    panel2.add(image_panel);
+                    jp_validate.add(bt_valider);
+                    panel2.add(jp_validate);
+                    panel2.validate();
+                    panel2.repaint();
                 }
+
             }
         });
-
-
 
 
     }

@@ -26,9 +26,9 @@ public class Piece {
 
     public void setPion(JButton button) {
         if ("white".equals(this.couleur)) {
-            button.setIcon(new ImageIcon("imageSantorini/pion_blanc.PNG"));
+            button.setIcon(new ImageIcon("imageSantorini/maison_etage0_batisseur_blanc.PNG"));
         } else {
-            button.setIcon(new ImageIcon("imageSantorini/pion_noir.PNG"));
+            button.setIcon(new ImageIcon("imageSantorini/maison_etage0_batisseur_rouge.PNG"));
         }
     }
 

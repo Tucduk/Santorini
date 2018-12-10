@@ -6,6 +6,9 @@ public class Model {
     private static int deplacementPossible = 1;
     private static int constructionPossible = 1;
     private Piece PionSelectionner;
+    private int etage[][] = new int[6][6];
+    private int opacity[][] = new int[6][6];
+
 
     public static int getDeplacementPossible() {
         return deplacementPossible;
@@ -45,7 +48,11 @@ public class Model {
     }
 
     public void setSol(JButton b) {
-        Icon Sol = new ImageIcon("imageSantorini/Sol5.PNG");
+        Icon Sol = new ImageIcon("imageSantorini/Sol.PNG");
+        b.setIcon(Sol);
+    }
+    public void setSolDome(JButton b) {
+        Icon Sol = new ImageIcon("imageSantorini/maison_etage0_dome.PNG");
         b.setIcon(Sol);
     }
 
@@ -54,13 +61,28 @@ public class Model {
         b.setIcon(Sol1);
     }
 
+    public void setSol1Dome(JButton b) {
+        Icon Sol1 = new ImageIcon("imageSantorini/maison_etage1_dome.PNG");
+        b.setIcon(Sol1);
+    }
+
     public void setSol2(JButton b) {
         Icon Sol2 = new ImageIcon("imageSantorini/maison_etage2.PNG");
         b.setIcon(Sol2);
     }
 
+    public void setSol2Dome(JButton b) {
+        Icon Sol2 = new ImageIcon("imageSantorini/maison_etage2_dome.PNG");
+        b.setIcon(Sol2);
+    }
+
     public void setSol3(JButton b) {
         Icon Sol3 = new ImageIcon("imageSantorini/maison_etage3.PNG");
+        b.setIcon(Sol3);
+    }
+
+    public void setSol3Dome(JButton b) {
+        Icon Sol3 = new ImageIcon("imageSantorini/maison_etage3_dome.PNG");
         b.setIcon(Sol3);
     }
 
@@ -107,4 +129,29 @@ public class Model {
     public void setPionSelectionner(Piece pionSelectionner) {
         PionSelectionner = pionSelectionner;
     }
+
+    public int[][] getEtage() {
+        return etage;
+    }
+
+    public int etageRechercher(int i, int j){
+        return etage[i][j];
+    }
+
+    public void setEtage(int[][] etage) {
+        this.etage = etage;
+    }
+
+    public void etageModif(int i,int j, int n){
+        this.etage[i][j] = n;
+    }
+
+    public void opacityModif(int i,int j, int n){
+        this.opacity[i][j] = n;
+    }
+
+    public int opacityRechercher(int i, int j){
+        return opacity[i][j];
+    }
+
 }
