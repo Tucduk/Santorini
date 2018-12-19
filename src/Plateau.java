@@ -48,6 +48,7 @@ class Plateau extends JFrame implements ActionListener {
     JPanel liste_panel;
     JLabel tf_liste;
     JPanel image_panel;
+    JPanel panelAttention;
 
 
     JTextField Text_Player_Age;
@@ -60,6 +61,7 @@ class Plateau extends JFrame implements ActionListener {
     JLabel pouvoir_label;
     JLabel activationPouvoir_label;
     JLabel labelTeam;
+    JLabel labelAttention;
 
     JComboBox liste1;
     JPanel panel1 = new JPanel();
@@ -499,6 +501,17 @@ class Plateau extends JFrame implements ActionListener {
                     image2.setSize(panel2.getWidth(), panel2.getHeight());
                     image_panel.add(image2);
                     panel2.add(image_panel);
+
+                    if(heroChoisis != "Artemis" && heroChoisis != "Artemis" && heroChoisis != "Athena" && heroChoisis != "Atlas" && heroChoisis != "Bellerophon" && heroChoisis != "Chronos" && heroChoisis != "Demeter" && heroChoisis != "Hades" && heroChoisis != "Pan"){
+                        panelAttention = new JPanel();
+                        labelAttention = new JLabel("");
+                        labelAttention.setText("<html><center><font color = #850606> Attention ce héro n'a pas encore de pouvoir </font></center></html>");
+                        labelAttention.setPreferredSize(new Dimension(150,50));
+                        panelAttention.add(labelAttention);
+                        panel2.add(panelAttention);
+                        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+                    }
+
                     jp_validate.add(bt_valider);
                     panel2.add(jp_validate);
                     panel2.validate();
@@ -873,6 +886,16 @@ class Plateau extends JFrame implements ActionListener {
                     image2.setSize(panel2.getWidth(), panel2.getHeight());
                     image_panel.add(image2);
                     panel2.add(image_panel);
+
+                    if(heroChoisis != "Artemis" && heroChoisis != "Artemis" && heroChoisis != "Athena" && heroChoisis != "Atlas" && heroChoisis != "Bellerophon" && heroChoisis != "Chronos" && heroChoisis != "Demeter" && heroChoisis != "Hades" && heroChoisis != "Pan"){
+                        panelAttention = new JPanel();
+                        labelAttention = new JLabel("");
+                        labelAttention.setText("<html><center><font color = #850606> Attention ce héro n'a pas encore de pouvoir </font></center></html>");
+                        labelAttention.setPreferredSize(new Dimension(150,50));
+                        panelAttention.add(labelAttention);
+                        panel2.add(panelAttention);
+                        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+                    }
                     jp_validate.add(bt_valider);
                     panel2.add(jp_validate);
                     panel2.validate();
